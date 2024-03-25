@@ -1,0 +1,4 @@
+# end point for creating topic. which will return unique ARN
+POST http://localhost:8080/api/create
+
+http://localhost:8080/api/push
