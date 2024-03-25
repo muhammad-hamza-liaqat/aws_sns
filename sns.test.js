@@ -1,4 +1,4 @@
-const { createTopic, pushNotification } = require('./controller/aws2'); 
+const { createTopic, pushNotification } = require('./controller/aws.controller'); 
 const { SNSClient, CreateTopicCommand, PublishCommand } = require('@aws-sdk/client-sns');
 
 jest.mock('@aws-sdk/client-sns', () => ({
