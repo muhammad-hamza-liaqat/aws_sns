@@ -1,0 +1,5 @@
+# for creating the topicName
+POST http://localhost:8080/api/create
+###
+# for pushing the nofitication based upon the ARN
+POST http://localhost:8080/api/push
