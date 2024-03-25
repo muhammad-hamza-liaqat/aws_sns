@@ -1,8 +1,4 @@
-const {
-  SNSClient,
-  CreateTopicCommand,
-  PublishCommand,
-} = require("@aws-sdk/client-sns");
+const { SNSClient, CreateTopicCommand, PublishCommand } = require("@aws-sdk/client-sns");
 
 // Create an instance of the SNS client with the access key ID, secret access key, and region
 const snsClient = new SNSClient({
@@ -29,11 +25,40 @@ const createTopic = async (req, res) => {
 };
 
 const pushNotification = async (req, res) => {
-  const { message, topicArn } = req.body;
+  const { message, topicArn, platforms } = req.body; 
   const params = {
     Message: message,
     TopicArn: topicArn,
   };
+  if (platforms.includes('web')) {
+    params.MessageAttributes = {
+      'Platform': {
+        DataType: 'String',
+        StringValue: 'web'
+      }
+    };
+  }
+
+  if (platforms.includes('ios')) {
+    params.MessageAttributes = {
+      ...(params.MessageAttributes || {}),
+      'Platform': {
+        DataType: 'String',
+        StringValue: 'ios'
+      }
+    };
+  }
+
+  if (platforms.includes('android')) {
+    params.MessageAttributes = {
+      ...(params.MessageAttributes || {}),
+      'Platform': {
+        DataType: 'String',
+        StringValue: 'android'
+      }
+    };
+  }
+
   try {
     const data = await snsClient.send(new PublishCommand(params));
     console.log("Message published successfully!");
