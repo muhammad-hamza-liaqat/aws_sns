@@ -1,6 +1,17 @@
-const { SNSClient, CreateTopicCommand, PublishCommand } = require("@aws-sdk/client-sns");
+const {
+  SNSClient,
+  CreateTopicCommand,
+  PublishCommand,
+} = require("@aws-sdk/client-sns");
 
-const snsClient = new SNSClient({ region: process.env.region });
+// Create an instance of the SNS client with the access key ID, secret access key, and region
+const snsClient = new SNSClient({
+  region: process.env.region,
+  credentials: {
+    accessKeyId: process.env.accessKeyId,
+    secretAccessKey: process.env.secretAccessKey,
+  },
+});
 
 const createTopic = async (req, res) => {
   const { topicName } = req.body;
