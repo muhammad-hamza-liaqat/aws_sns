@@ -4,9 +4,9 @@ const {
   pushNotification,
 } = require("../controller/aws.controller");
 
-const router = express.Router();
+const aws_sns_routes = express.Router();
 
-router.get("/create", createTopic);
-router.get("/push", pushNotification);
+aws_sns_routes.route("/create").get(createTopic);
+aws_sns_routes.route("/push").get(pushNotification);
 
-module.exports = router;
+module.exports = aws_sns_routes;
