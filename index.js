@@ -6,7 +6,7 @@ require("dotenv").config();
 const aws_sns_routes = require("./routes/aws.routes.js");
 
 // middleware
-app.use(cors);
+app.use(cors());
 app.use(bodyParser.json());
 
 // routes

@@ -6,7 +6,7 @@ const {
 
 const aws_sns_routes = express.Router();
 
-aws_sns_routes.route("/create").get(createTopic);
-aws_sns_routes.route("/push").get(pushNotification);
+aws_sns_routes.route("/create").post(createTopic);
+aws_sns_routes.route("/push").post(pushNotification);
 
 module.exports = aws_sns_routes;
