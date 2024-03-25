@@ -6,7 +6,7 @@ const {
 
 const router = express.Router();
 
-router.post("/create-topic", createTopic);
-router.post("/push-notification", pushNotification);
+router.get("/create", createTopic);
+router.get("/push", pushNotification);
 
 module.exports = router;

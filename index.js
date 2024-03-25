@@ -4,6 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 require("dotenv").config();
 const aws_sns_routes = require("./routes/aws.routes")
+
 // middleware
 app.use(cors);
 app.use(bodyParser.json());
