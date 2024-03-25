@@ -1,5 +1,17 @@
 # for creating the topicName
 POST http://localhost:8080/api/create
+Content-Type: application/json
+
+{
+    "topicName" : "my_demo_test_case"
+}
+
 ###
 # for pushing the nofitication based upon the ARN
 POST http://localhost:8080/api/push
+Content-Type: application/json
+
+{
+    "message" : "this is my demo push notifcation",
+    "topicARN" : "me-east-19"
+}
