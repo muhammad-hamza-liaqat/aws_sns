@@ -21,7 +21,7 @@ const createTopic = async (req, res) => {
   try {
     const data = await snsClient.send(new CreateTopicCommand(params));
     console.log("SNS topic created successfully!");
-    res.json({ topicArn: data.TopicArn });
+    res.status(201).json({ topicArn: data.TopicArn });
   } catch (error) {
     console.error("Error creating SNS topic:", error);
     res.status(500).json({ error: "Error creating SNS topic" });
@@ -37,7 +37,7 @@ const pushNotification = async (req, res) => {
   try {
     const data = await snsClient.send(new PublishCommand(params));
     console.log("Message published successfully!");
-    res.json({ message: "Message published successfully! :)" });
+    res.status(201).json({ message: "Message published successfully! :)" });
   } catch (error) {
     console.error("Error publishing message:", error);
     res.status(500).json({ error: "Error publishing message" });
