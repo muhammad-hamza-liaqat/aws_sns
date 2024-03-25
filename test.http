@@ -13,5 +13,6 @@ Content-Type: application/json
 
 {
     "message" : "this is my demo push notifcation",
-    "topicARN" : "me-east-19"
+    "topicARN" : "me-east-19",
+    "platforms" : ["web", "ios"]
 }
