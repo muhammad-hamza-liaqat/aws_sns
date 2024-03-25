@@ -1,11 +1,4 @@
-const { createTopic, pushNotification } = require('./controller/aws.controller'); 
-const { SNSClient, CreateTopicCommand, PublishCommand } = require('@aws-sdk/client-sns');
-
-jest.mock('@aws-sdk/client-sns', () => ({
-  SNSClient: jest.fn(),
-  CreateTopicCommand: jest.fn(),
-  PublishCommand: jest.fn(),
-}));
+const { createTopic, pushNotification } = require('./controller/aws.controller');
 
 describe('AWS SNS Controller', () => {
   beforeEach(() => {
@@ -13,6 +6,8 @@ describe('AWS SNS Controller', () => {
   });
 
   test('createTopic function should create an SNS topic', async () => {
+    const { SNSClient, CreateTopicCommand } = require('@aws-sdk/client-sns');
+
     const mockCreateTopicCommandResponse = { TopicArn: 'arn:aws:sns:us-east-1:123456789012:MyTopic' };
     SNSClient.prototype.send = jest.fn().mockResolvedValue(mockCreateTopicCommandResponse);
 
@@ -29,15 +24,25 @@ describe('AWS SNS Controller', () => {
   });
 
   test('pushNotification function should publish a message to an SNS topic', async () => {
+    const { SNSClient, PublishCommand } = require('@aws-sdk/client-sns');
+
     const mockPublishCommandResponse = { MessageId: 'abc123' };
     SNSClient.prototype.send = jest.fn().mockResolvedValue(mockPublishCommandResponse);
 
-    const req = { body: { message: 'Hello', topicArn: 'arn:aws:sns:us-east-1:123456789012:MyTopic' } };
+    const req = { 
+      body: { 
+        message: 'Hello', 
+        topicArn: 'arn:aws:sns:us-east-1:123456789012:MyTopic',
+        platforms: ['web', 'ios', 'android'] // Adding platforms field
+      } 
+    };
     const res = {
       status: jest.fn(() => res),
       json: jest.fn(),
     };
+
     await pushNotification(req, res);
+
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.json).toHaveBeenCalledWith({ message: 'Message published successfully! :)' });
   });
