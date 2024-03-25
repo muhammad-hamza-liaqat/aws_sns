@@ -1,27 +1,20 @@
-const aws = require("aws-sdk");
+const { SNSClient, CreateTopicCommand, PublishCommand } = require("@aws-sdk/client-sns");
 
-aws.config.update({
-  accessKeyId: process.env.accessKeyID,
-  secretAccessKey: process.env.secretAccessKey,
-  region: process.env.region,
-});
-
-const sns = new aws.SNS();
+const snsClient = new SNSClient({ region: process.env.region });
 
 const createTopic = async (req, res) => {
   const { topicName } = req.body;
   const params = {
     Name: topicName,
   };
-  sns.createTopic(params, (error, data) => {
-    if (error) {
-      console.error("Error creating SNS topic:", error);
-      res.status(500).json({ error: "Error creating SNS topic" });
-    } else {
-      console.log("SNS topic created successfully!");
-      res.json({ topicArn: data.TopicArn });
-    }
-  });
+  try {
+    const data = await snsClient.send(new CreateTopicCommand(params));
+    console.log("SNS topic created successfully!");
+    res.json({ topicArn: data.TopicArn });
+  } catch (error) {
+    console.error("Error creating SNS topic:", error);
+    res.status(500).json({ error: "Error creating SNS topic" });
+  }
 };
 
 const pushNotification = async (req, res) => {
@@ -30,15 +23,14 @@ const pushNotification = async (req, res) => {
     Message: message,
     TopicArn: topicArn,
   };
-  sns.publish(params, (err, data) => {
-    if (err) {
-      console.error("Error publishing message:", err);
-      res.status(500).json({ error: "Error publishing message" });
-    } else {
-      console.log("Message published successfully!");
-      res.json({ message: "Message published successfully! :)" });
-    }
-  });
+  try {
+    const data = await snsClient.send(new PublishCommand(params));
+    console.log("Message published successfully!");
+    res.json({ message: "Message published successfully! :)" });
+  } catch (error) {
+    console.error("Error publishing message:", error);
+    res.status(500).json({ error: "Error publishing message" });
+  }
 };
 
 module.exports = {
